@@ -3,9 +3,12 @@ import axios from "axios";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
 
-const API_URL_REGISTER = "http://localhost:5000/api/auth/register";
-const API_URL_LOGIN = "http://localhost:5000/api/auth/login";
-const API_URL_PROFILE = "http://localhost:5000/api/auth/profile";
+const API_URL_REGISTER =
+  "https://backend-auth-with-gpt.onrender.com/api/auth/register";
+const API_URL_LOGIN =
+  "https://backend-auth-with-gpt.onrender.com/api/auth/login";
+const API_URL_PROFILE =
+  "https://backend-auth-with-gpt.onrender.com/api/auth/profile";
 
 // Register User
 export const registerUser = createAsyncThunk(

@@ -8,7 +8,7 @@ export const registerUser = createAsyncThunk(
   async (formData, { rejectWithValue }) => {
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/auth/register",
+        "https://backend-auth-with-gpt.onrender.com/api/auth/register",
         formData
       );
       return response.data; // Assuming the response contains user data
@@ -23,7 +23,7 @@ export const loginUser = createAsyncThunk(
   async (formData, { rejectWithValue }) => {
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/auth/login",
+        "https://backend-auth-with-gpt.onrender.com/api/auth/login",
         formData
       );
       return response.data; // Assuming the response contains user data and token
