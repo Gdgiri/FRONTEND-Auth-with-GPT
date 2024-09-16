@@ -1,7 +1,7 @@
 // src/Pages/Register.jsx
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { registerUser } from "../Redux/Actions/authActions";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -98,6 +98,9 @@ const Register = () => {
         <button type="submit" className="btn btn-primary">
           Register
         </button>
+        <br />
+        <span>Already a user?</span>
+        <button className="btn btn-link"><Link to="/login">Login</Link></button>
       </form>
     </div>
   );

@@ -1,25 +1,110 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { logoutUser } from "../Redux/Actions/authActions"; // Import your logout action
+import { useNavigate, Link } from "react-router-dom"; // Import Link here
+import axios from "axios";
+import { getUser, deleteUser } from "../Redux/Reducers/userSlice";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Dashboard = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const user = useSelector((state) => state.auth.user); // Access user data from Redux store
+  const users = useSelector((state) => state.users.users); // Access user list from Redux store
+  const userCount = users.length; // Get the number of users
 
-  const handleLogout = () => {
-    dispatch(logoutUser());
-    navigate("/login"); // Redirect to login page after logout
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(
+        "https://backend-crud-aee4.onrender.com/api/user/get-user"
+      );
+      dispatch(getUser(response.data.result));
+    } catch (error) {
+      console.log("Error fetching data:", error);
+      toast.error("Failed to fetch users!");
+    }
+  };
+
+  const handleDelete = (id) => {
+    // Implement handleDelete logic if not already implemented
+    dispatch(deleteUser({ id }));
   };
 
   return (
-    <div className="container">
-      <h2>Dashboard</h2>
-      <p>Welcome, {user ? user.name : "User"}!</p>
-      <button className="btn btn-danger" onClick={handleLogout}>
-        Logout
-      </button>
+    <div className="container d-flex flex-column min-vh-100">
+      <ToastContainer /> {/* Toast notifications */}
+      <div className="container-fluid d-flex flex-column align-items-center justify-content-center mt-4">
+        <div className="card mb-4" style={{ width: "18rem" }}>
+          <div className="card-body">
+            <h5 className="card-title">User Count</h5>
+            <p className="card-text">Total number of users: {userCount}</p>
+          </div>
+        </div>
+        <div className="mb-4">
+          <button
+            className="btn btn-success mx-2"
+            onClick={() => navigate("/create")}
+          >
+            Create User
+          </button>
+        </div>
+        <div className="container-fluid d-flex vh-100 justify-content-center align-items-center bg-light">
+          <div className="row justify-content-center w-100">
+            <div className="col-lg-8 col-md-10 col-sm-12">
+              <div className="bg-white shadow-sm rounded p-4">
+                <div className="d-flex justify-content-between align-items-center mb-3">
+                  <h2 className="text-dark">User List</h2>
+                </div>
+                <div className="table-responsive">
+                  {/* Make table responsive */}
+                  <table className="table table-bordered table-striped text-center">
+                    <thead className="bg-primary text-white">
+                      <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Age</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody className="bg-light">
+                      {users.map((ele) => (
+                        <tr
+                          key={ele.id}
+                          className="border-bottom bg-light text-black"
+                        >
+                          <td>{ele.name}</td>
+                          <td>{ele.email}</td>
+                          <td>{ele.age}</td>
+                          <td>
+                            <div className="d-flex justify-content-center">
+                              <Link
+                                to={`/edit/${ele.id}`}
+                                className="btn btn-success btn-sm mx-1"
+                              >
+                                Edit
+                              </Link>
+                              <button
+                                className="btn btn-danger btn-sm mx-1"
+                                onClick={() => handleDelete(ele.id)}
+                              >
+                                Delete
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

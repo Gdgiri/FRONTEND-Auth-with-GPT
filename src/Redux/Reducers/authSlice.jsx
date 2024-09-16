@@ -1,41 +1,12 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
+// src/Redux/Slices/authSlice.jsx
+import { createSlice } from "@reduxjs/toolkit";
+import {
+  registerUser,
+  loginUser,
+  logoutUser,
+  initializeUser,
+} from "../Actions/authActions";
 
-// Define the async thunks
-
-// Register user
-export const registerUser = createAsyncThunk(
-  "auth/registerUser",
-  async (formData, { rejectWithValue }) => {
-    try {
-      const response = await axios.post(
-        "http://localhost:5000/api/auth/register",
-        formData
-      );
-      return response.data; // Assuming the response contains user data
-    } catch (error) {
-      return rejectWithValue(error.response.data.message);
-    }
-  }
-);
-
-// Login user
-export const loginUser = createAsyncThunk(
-  "auth/loginUser",
-  async (formData, { rejectWithValue }) => {
-    try {
-      const response = await axios.post(
-        "http://localhost:5000/api/auth/login",
-        formData
-      );
-      return response.data; // Assuming the response contains user data and token
-    } catch (error) {
-      return rejectWithValue(error.response.data.message);
-    }
-  }
-);
-
-// Create the slice
 const authSlice = createSlice({
   name: "auth",
   initialState: {
@@ -45,7 +16,6 @@ const authSlice = createSlice({
     error: null,
   },
   reducers: {
-    // Logout action
     logout(state) {
       state.user = null;
       state.token = "";
@@ -74,10 +44,20 @@ const authSlice = createSlice({
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.error = action.payload;
+      })
+      .addCase(logoutUser.fulfilled, (state) => {
+        state.user = null;
+        state.token = "";
+        state.isAuthenticated = false;
+      })
+      .addCase(initializeUser.fulfilled, (state, action) => {
+        state.user = action.payload.user;
+        state.token = action.payload.token;
+        state.isAuthenticated = true;
+        localStorage.setItem("token", action.payload.token); // Store the token
       });
   },
 });
 
 export const { logout } = authSlice.actions;
-
 export default authSlice.reducer;

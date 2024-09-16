@@ -1,13 +1,12 @@
-// redux/store.js
 import { configureStore } from "@reduxjs/toolkit";
-import authReducer from "./Reducers/authSlice"; // Adjust path if necessary
+import authReducer from "./Reducers/authSlice";
+import userReducer from "./Reducers/userSlice"; // Ensure correct path
 
 const store = configureStore({
   reducer: {
-    auth: authReducer, // Name this key according to your slice
-    // You can add more reducers here if needed
+    auth: authReducer,
+    users: userReducer, // Ensure this matches your slice name
   },
-  // Optional: add additional middleware or enhancers here
 });
 
 export default store;
