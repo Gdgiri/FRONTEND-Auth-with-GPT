@@ -29,9 +29,17 @@ const Dashboard = () => {
     }
   };
 
-  const handleDelete = (id) => {
-    // Implement handleDelete logic if not already implemented
-    dispatch(deleteUser({ id }));
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(
+        `https://backend-crud-aee4.onrender.com/api/user/delete-user/${id}`
+      );
+      dispatch(deleteUser({ id })); // Dispatch action to update the Redux state
+      toast.success("User deleted successfully!");
+    } catch (error) {
+      console.error("Error deleting user:", error);
+      toast.error("Failed to delete user!");
+    }
   };
 
   return (
