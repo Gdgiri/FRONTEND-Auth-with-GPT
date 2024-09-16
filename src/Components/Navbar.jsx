@@ -24,9 +24,9 @@ const Navbar = () => {
         {/* Centered Circle and Label */}
         <div className="circle-container mx-auto d-flex flex-column align-items-center">
           <strong>
-            <h5 className="mb-2">Number of Users:</h5>
+            <h5 className="mb-2">User Details</h5>
           </strong>
-          <div className="circle">{userCount}</div>
+         
         </div>
 
         {/* Logout Button */}
